@@ -2,7 +2,7 @@ import React, { Text, TextInput, View } from 'react-native';
 import {useState} from 'react';
 
 export function NumberInput(props) {
-    const [number, setNumber] = useState(null);
+    const [number, setNumber] = useState('');
     return (<View style={{
         flex: 1
     }}>
