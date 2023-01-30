@@ -35,8 +35,8 @@ export function NumberInput(props) {
                     textAlign='center'
                     keyboardType='numeric'
                     clearTextOnFocus
-                    value={number}
                     onChangeText={(valueAsString) => {
+                        console.log(valueAsString);
                         const valueAsNumber = parseFloat(valueAsString);
                         setNumber(valueAsNumber);
                         if (props.onChange) {

@@ -111,53 +111,55 @@ export class MainWindow extends Component<IState> {
 
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-                <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => {
-                    Keyboard.dismiss();
-                }}>
+                <View style={{
+                    flex: 1
+                }} >
                     <View style={{
-                        flex: 1
+                        flex: .75
+                    }}></View>
+                    <View style={{
+                        flex: .5,
                     }}>
-                        <View style={{
-                            flex: .75
-                        }}></View>
-                        <View style={{
-                            flex: .5,
-                        }}>
-                            <Text style={{
-                                textAlign: 'center',
-                                fontSize: '20',
-                                fontWeight: 'bold'
-                            }}>Vasoactive-inotropic Calculator</Text>
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'stretch',
-                            flexDirection: 'row'
-                        }}>
-                            <NumberInput title="Weight" apiName={"Weight"} onChange={(event) => {
-                                this.weight = event.value;
-                            }}></NumberInput>
-                            {this.genNumberInput(getVasopressin())}
-                        </View>
-                        {this.getPairs()}
-                        
-                        <View style={{
-                            flex : .25
-                        }}></View>
+                        <Text style={{
+                            textAlign: 'center',
+                            fontSize: '20',
+                            fontWeight: 'bold'
+                        }}>Vasoactive-inotropic Calculator</Text>
+                    </View>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'stretch',
+                        flexDirection: 'row'
+                    }}>
+                        <NumberInput title="Weight" apiName={"Weight"} onChange={(event) => {
+                            this.weight = event.value;
+                        }}></NumberInput>
+                        {this.genNumberInput(getVasopressin())}
+                    </View>
+                    {this.getPairs()}
+
+                    <View style={{
+                        flex: .25
+                    }}></View>
+                    <View style={{
+                        flex: .5,
+                        width : '30%',
+                        alignSelf : 'center'
+                    }}>
                         <Button color='#00aeef' title='Calculate' onPress={() => {
                             this.calculate();
                         }}></Button>
-                        <View style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            {this.state.showCalculation && <Text>{this.state.calculation}</Text>}
-                        </View>
                     </View>
-                </TouchableWithoutFeedback>
+                    <View style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        {this.state.showCalculation && <Text>{this.state.calculation}</Text>}
+                    </View>
+                </View>
             </KeyboardAvoidingView >
         );
     }
