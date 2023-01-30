@@ -1,7 +1,13 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
     "cSpell.words": [
+        "Dobutamine",
+        "Enoximone",
+        "Levosimendan",
         "Milrinone",
-        "Mult"
+        "Mult",
+        "Olprinone",
+        "Phenylephrine",
+        "Terlipressin"
     ]
 }
