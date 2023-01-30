@@ -21,7 +21,7 @@ export function NumberInput(props) {
             flexDirection: 'row'
         }}>
             <View style={{
-                flex: 1
+                flex: .5
             }}></View>
             <View style={{
                 flex: 1,
@@ -49,7 +49,7 @@ export function NumberInput(props) {
                 ></TextInput>
             </View>
             <View style={{
-                flex: 1
+                flex: .5
             }}></View>
         </View>
 

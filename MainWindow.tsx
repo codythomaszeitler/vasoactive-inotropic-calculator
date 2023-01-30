@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Text, Button, StyleSheet, ShadowPropTypesIOS } from 'react-native';
 import { getConfig } from './config';
+import { IvConfig } from './src/config.schema';
 import { IV } from './src/iv';
 import { NonNegativeNumber } from './src/non.negative.number';
 import { NumberInput } from './src/NumberInput';
@@ -62,7 +63,52 @@ export class MainWindow extends Component<IState> {
         });
     }
 
+    getPairs() {
+        const pairs = [];
+
+        const getNonVasopressin = () => {
+            return config.ivs.filter((ivConfig: IvConfig) => {
+                console.log(ivConfig.name !== 'Vasopressin');
+                return ivConfig.name !== 'Vasopressin'
+            });
+        }
+
+        const ivs = getNonVasopressin();
+        for (let i = 0; i < ivs.length; i = i + 2) {
+            const firstIvConfig = ivs[i];
+            const secondIvConfig = ivs[i + 1];
+
+            pairs.push((<View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'stretch',
+                flexDirection: 'row'
+            }}>
+                {this.genNumberInput(firstIvConfig)}
+                {secondIvConfig && this.genNumberInput(secondIvConfig)}
+            </View>));
+        }
+        return pairs;
+    }
+
+    genNumberInput(ivInput: IvConfig) {
+        return (<NumberInput key={ivInput.name} title={ivInput.label} apiName={ivInput.name} onChange={(event) => {
+            this.values[event.name] = event.value;
+        }}></NumberInput>);
+    }
+
     render() {
+        const getVasopressin = () => {
+            let found = null;
+            for (let ivConfig of config.ivs) {
+                if (ivConfig.name === 'Vasopressin') {
+                    found = ivConfig;
+                    break;
+                }
+            }
+            return found;
+        }
+
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                 <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => {
@@ -86,23 +132,22 @@ export class MainWindow extends Component<IState> {
                         <View style={{
                             flex: 1,
                             justifyContent: 'center',
-                            alignItems: 'stretch'
+                            alignItems: 'stretch',
+                            flexDirection: 'row'
                         }}>
                             <NumberInput title="Weight" apiName={"Weight"} onChange={(event) => {
                                 this.weight = event.value;
                             }}></NumberInput>
+                            {this.genNumberInput(getVasopressin())}
                         </View>
-                        {config.ivs.map((ivInput) => {
-                            return (<View style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'stretch'
-                            }}>
-                                <NumberInput key={ivInput.name} title={ivInput.label} apiName={ivInput.name} onChange={(event) => {
-                                    this.values[event.name] = event.value;
-                                }}></NumberInput>
-                            </View>);
-                        })}
+                        {this.getPairs()}
+                        
+                        <View style={{
+                            flex : .25
+                        }}></View>
+                        <Button color='#00aeef' title='Calculate' onPress={() => {
+                            this.calculate();
+                        }}></Button>
                         <View style={{
                             flex: 1,
                             flexDirection: 'row',
@@ -111,12 +156,9 @@ export class MainWindow extends Component<IState> {
                         }}>
                             {this.state.showCalculation && <Text>{this.state.calculation}</Text>}
                         </View>
-                        <Button title='Calculate' onPress={() => {
-                            this.calculate();
-                        }}></Button>
                     </View>
                 </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView >
         );
     }
 }

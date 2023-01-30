@@ -17,7 +17,6 @@ export class VisCalculator {
             const ivConfig = this.getIvConfigFor(iv.getName());
             const termScore = ivConfig.term(iv, person);
             result = result.add(termScore);
-            console.log(result);
         });
 
         return result.ceil();
