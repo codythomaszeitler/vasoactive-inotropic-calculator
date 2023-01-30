@@ -1,9 +1,13 @@
 import { Component } from 'react';
 import { View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Text, Button, StyleSheet, ShadowPropTypesIOS } from 'react-native';
+import { getConfig } from './config';
+import { IV } from './src/iv';
+import { NonNegativeNumber } from './src/non.negative.number';
 import { NumberInput } from './src/NumberInput';
+import { PersonBuilder } from './src/person';
+import { VisCalculator } from './src/vis.calc';
 
-import { vasocativeIntropicFunction } from './src/VasoactiveIntropicFunction';
-
+const config = getConfig();
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -13,19 +17,17 @@ const styles = StyleSheet.create({
     },
 });
 
-const inputs = 
-[   'Dopamine (mcg/kg/min)',
-    'Dobutamine (ug/kg/min)',
-    'Epinephrine (ug/kg/min)',
-    'Norepinephrine (ug/kg/min)',
-    'Milrinone (ug/kg/min)',
-    'Vasopression (mU/kg/min)'];
+interface IState {
+    showCalculation: boolean,
+    calculation: number
+}
 
-export class MainWindow extends Component {
+export class MainWindow extends Component<IState> {
     values;
+    weight;
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.values = {};
 
         this.state = {
@@ -34,55 +36,31 @@ export class MainWindow extends Component {
         }
     }
 
-    canRunCalculation(values) {
-        const currentlyInputtedNames = Object.keys(values);
-        for (const input of inputs) {
-            if (!currentlyInputtedNames.includes(input)) {
-                console.log('The currently inputted names does not contain everything')
-                return false;
-            } else {
-                if (values[input] === NaN) {
-                    console.log('There was a nan somewhere');
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    calculate() {
+        const builder = new PersonBuilder();
 
-    convertToDomain(values) {
-        const domain = {};
-
-        for (const uiName of Object.keys(values)) {
-            if (uiName === 'Dopamine (mcg/kg/min)') {
-                domain.dopamine = values[uiName];
-            } else if (uiName === 'Dobutamine (ug/kg/min)') {
-                domain.dobutamine = values[uiName];
-            } else if (uiName === 'Epinephrine (ug/kg/min)') {
-                domain.epinephrine = values[uiName];
-            } else if (uiName === 'Norepinephrine (ug/kg/min)') {
-                domain.norepinephrine = values[uiName];
-            } else if (uiName === 'Milrinone (ug/kg/min)') {
-                domain.milrinone = values[uiName];
-            } else if (uiName === 'Vasopression (mU/kg/min)') {
-                domain.vasopression = values[uiName];
-            } else {
-                throw new Error(uiName + ' was not a supported domain value');
-            }
-        }
-        return domain;
-    }
-
-    calculate(values) {
-        console.log(values);
-        if (!this.canRunCalculation(values)) {
-            throw new Error('Should not have called calculate when all ui fields have not been filled out');
+        if (this.weight) {
+            builder.setWeight(NonNegativeNumber.get(this.weight));
         }
 
-        const domain = this.convertToDomain(values);
-        return vasocativeIntropicFunction(domain);
-    }
+        for (const key of Object.keys(this.values)) {
+            const name = key;
 
+            const value = NonNegativeNumber.get(this.values[name]);
+
+            const iv = new IV(name, value);
+            builder.addIV(iv);
+        }
+
+        const person = builder.build();
+        const calculator = new VisCalculator(config);
+        const result = calculator.calc(person);
+
+        this.setState({
+            showCalculation: true,
+            calculation: result.valueOf()
+        });
+    }
 
     render() {
         return (
@@ -105,28 +83,23 @@ export class MainWindow extends Component {
                                 fontWeight: 'bold'
                             }}>Vasoactive-inotropic Calculator</Text>
                         </View>
-                        {inputs.map((input) => {
+                        <View style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'stretch'
+                        }}>
+                            <NumberInput title="Weight" apiName={"Weight"} onChange={(event) => {
+                                this.weight = event.value;
+                            }}></NumberInput>
+                        </View>
+                        {config.ivs.map((ivInput) => {
                             return (<View style={{
                                 flex: 1,
                                 justifyContent: 'center',
                                 alignItems: 'stretch'
                             }}>
-                                <NumberInput key={input} title={input} onChange={(event) => {
+                                <NumberInput key={ivInput.name} title={ivInput.label} apiName={ivInput.name} onChange={(event) => {
                                     this.values[event.name] = event.value;
-
-                                    const canRunCalculation = this.canRunCalculation(this.values);
-
-                                    if (canRunCalculation) {
-                                        this.setState({
-                                            showCalculation: canRunCalculation,
-                                            calculation: this.calculate(this.values)
-                                        });
-                                    } else {
-                                        this.setState({
-                                            showCalculation: canRunCalculation,
-                                            calculation: NaN
-                                        });
-                                    }
                                 }}></NumberInput>
                             </View>);
                         })}
@@ -138,6 +111,9 @@ export class MainWindow extends Component {
                         }}>
                             {this.state.showCalculation && <Text>{this.state.calculation}</Text>}
                         </View>
+                        <Button title='Calculate' onPress={() => {
+                            this.calculate();
+                        }}></Button>
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>

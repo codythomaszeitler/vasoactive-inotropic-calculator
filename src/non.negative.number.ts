@@ -37,4 +37,8 @@ export class NonNegativeNumber {
         const result = Math.ceil(this.value);
         return new NonNegativeNumber(result);
     }
+
+    public valueOf() : number {
+        return this.value;
+    }
 } 

@@ -1,5 +1,5 @@
 import React, { Text, TextInput, View } from 'react-native';
-import {useState} from 'react';
+import { useState } from 'react';
 
 export function NumberInput(props) {
     const [number, setNumber] = useState('');
@@ -30,22 +30,22 @@ export function NumberInput(props) {
                     backgroundColor: '#d1d1d1',
                     width: "100%",
                     height: "100%",
-                    borderRadius : 10
+                    borderRadius: 10
                 }}
-                textAlign ='center'
-                keyboardType='numeric'
-                clearTextOnFocus
-                value={number}
-                onChangeText={(valueAsString) => {
-                    const valueAsNumber = parseFloat(valueAsString);
-                    setNumber(valueAsNumber);
-                    if (props.onChange) {
-                        props.onChange({
-                            value : valueAsNumber,
-                            name : props.title
-                        });
-                    }
-                }}
+                    textAlign='center'
+                    keyboardType='numeric'
+                    clearTextOnFocus
+                    value={number}
+                    onChangeText={(valueAsString) => {
+                        const valueAsNumber = parseFloat(valueAsString);
+                        setNumber(valueAsNumber);
+                        if (props.onChange) {
+                            props.onChange({
+                                value: valueAsNumber,
+                                name: props.apiName
+                            });
+                        }
+                    }}
                 ></TextInput>
             </View>
             <View style={{
