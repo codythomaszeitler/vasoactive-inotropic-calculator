@@ -45,12 +45,21 @@ export class MainWindow extends Component<IState> {
         }
 
         for (const key of Object.keys(this.values)) {
-            const name = key;
+            if (!Number.isNaN(this.values[key])) {
+                if (key === 'Vasopressin' && this.weight && !Number.isNaN(this.weight)) {
+                    const name = key;
+                    const value = NonNegativeNumber.get(this.values[name]);
 
-            const value = NonNegativeNumber.get(this.values[name]);
+                    const iv = new IV(name, value);
+                    builder.addIV(iv);
+                } else if (key !== 'Vasopressin') {
+                    const name = key;
+                    const value = NonNegativeNumber.get(this.values[name]);
 
-            const iv = new IV(name, value);
-            builder.addIV(iv);
+                    const iv = new IV(name, value);
+                    builder.addIV(iv);
+                }
+            }
         }
 
         const person = builder.build();
@@ -68,7 +77,6 @@ export class MainWindow extends Component<IState> {
 
         const getNonVasopressin = () => {
             return config.ivs.filter((ivConfig: IvConfig) => {
-                console.log(ivConfig.name !== 'Vasopressin');
                 return ivConfig.name !== 'Vasopressin'
             });
         }
@@ -144,8 +152,8 @@ export class MainWindow extends Component<IState> {
                     }}></View>
                     <View style={{
                         flex: .5,
-                        width : '30%',
-                        alignSelf : 'center'
+                        width: '30%',
+                        alignSelf: 'center'
                     }}>
                         <Button color='#00aeef' title='Calculate' onPress={() => {
                             this.calculate();
