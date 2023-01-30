@@ -3,12 +3,10 @@ export class NonNegativeNumber {
 
     private value : number;
 
-    constructor(value : number) {
+    private constructor(value : number) {
         this.value = value;
     }
 
-    // This just has to be the point where an exception
-    // would be thrown ? 
     public static get(value : number) : NonNegativeNumber {
         if (value < 0) {
             throw new TypeError(`Cannot construct non negative number with negative number [${value}].`);
