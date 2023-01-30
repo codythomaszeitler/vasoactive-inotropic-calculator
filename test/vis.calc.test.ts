@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import { IV, multDoseCalculation } from '../src/iv';
 import { NonNegativeNumber } from '../src/non.negative.number';
-import { multDoseCalcWithWeight, Person, PersonBuilder } from '../src/person';
+import { multDoseCalcWithWeight, PersonBuilder } from '../src/person';
 import { VisCalculator } from '../src/vis.calc';
 
 describe('vis calc', () => {
