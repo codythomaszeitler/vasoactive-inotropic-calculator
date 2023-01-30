@@ -29,4 +29,14 @@ export class NonNegativeNumber {
         const result = this.value * number.value;
         return new NonNegativeNumber(result);
     }
+
+    public div(number : NonNegativeNumber) : NonNegativeNumber {
+        const result = this.value / number.value;
+        return new NonNegativeNumber(result);
+    }
+
+    public ceil() : NonNegativeNumber {
+        const result = Math.ceil(this.value);
+        return new NonNegativeNumber(result);
+    }
 } 
