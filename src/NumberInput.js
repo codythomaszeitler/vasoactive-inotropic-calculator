@@ -12,7 +12,9 @@ export function NumberInput(props) {
             justifyContent: 'center',
             alignItems: 'center'
         }}>
-            <Text adjustsFontSizeToFit>{props.title}</Text>
+            <Text style={{
+                fontSize : '12px'
+            }} adjustsFontSizeToFit>{props.title}</Text>
         </View>
         <View style={{
             flex: 1,
@@ -30,10 +32,11 @@ export function NumberInput(props) {
                     backgroundColor: '#d1d1d1',
                     width: "100%",
                     height: "100%",
-                    borderRadius: 10
+                    borderRadius: 10,
+                    textAlign : 'center'
                 }}
                     textAlign='center'
-                    keyboardType='numeric'
+                    keyboardType='decimal-pad'
                     onChangeText={(valueAsString) => {
                         console.log(valueAsString);
                         const valueAsNumber = parseFloat(valueAsString);

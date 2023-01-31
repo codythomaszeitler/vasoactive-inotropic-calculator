@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Text, Button, StyleSheet, ShadowPropTypesIOS } from 'react-native';
+import { View, KeyboardAvoidingView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from './config';
 import { IvConfig } from './src/config.schema';
 import { IV } from './src/iv';
@@ -130,7 +130,7 @@ export class MainWindow extends Component<IState> {
                     }}>
                         <Text style={{
                             textAlign: 'center',
-                            fontSize: '20',
+                            fontSize: '14px',
                             fontWeight: 'bold'
                         }}>Vasoactive-inotropic Calculator</Text>
                     </View>
@@ -140,7 +140,7 @@ export class MainWindow extends Component<IState> {
                         alignItems: 'stretch',
                         flexDirection: 'row'
                     }}>
-                        <NumberInput title="Weight" apiName={"Weight"} onChange={(event) => {
+                        <NumberInput title="Weight (kg)" apiName={"Weight"} onChange={(event) => {
                             this.weight = event.value;
                         }}></NumberInput>
                         {this.genNumberInput(getVasopressin())}
@@ -151,13 +151,27 @@ export class MainWindow extends Component<IState> {
                         flex: .25
                     }}></View>
                     <View style={{
-                        flex: .5,
+                        flex: .4,
                         width: '30%',
-                        alignSelf: 'center'
+                        alignSelf: 'center',
                     }}>
-                        <Button color='#00aeef' title='Calculate' onPress={() => {
-                            this.calculate();
-                        }}></Button>
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: '#00aeef',
+                                flex: 1,
+                                justifyContent: 'center',
+                                borderRadius: 15
+                            }}
+                            onPress={() => {
+                                this.calculate();
+                            }} >
+                            <Text style={{
+                                textAlign: 'center',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                fontSize: '12px'
+                            }}>{'CALCULATE'}</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={{
                         flex: 1,
